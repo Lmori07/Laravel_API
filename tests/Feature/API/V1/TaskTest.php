@@ -2,7 +2,6 @@
 
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\postJson;
 
 // The trait must be used inside the file scope properly for Pest
 uses(RefreshDatabase::class);
