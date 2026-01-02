@@ -12,7 +12,7 @@ test('test user can login and receive token', function () {
 
     $response = $this->postJson('/api/auth/login', [
         'email' => $user->email,
-        'password' => 'password'
+        'password' => 'password',
     ]);
 
     $response->assertOk();
@@ -25,9 +25,40 @@ test('user cannot login with invalid credentials', function () {
 
     $response = $this->postJson('/api/auth/login', [
         'email' => $user->email,
-        'password' => 'wrong-password'
+        'password' => 'wrong-password',
     ]);
 
     $response->assertStatus(422);
     $response->assertJsonValidationErrors('email');
+});
+
+test('user can register and receive token', function () {
+    $payload = [
+        'name' => 'New user',
+        'email' => $email = 'newuser@example.com',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+    ];
+
+    $response = $this->postJson('/api/auth/register', $payload);
+
+    $response->assertCreated();
+    $response->assertJsonStructure(['token', 'user']);
+    $this->assertDatabaseHas('users', [
+        'email' => $email,
+    ]);
+});
+
+test('user cannot register with invalid credentials', function () {
+    $payload = [
+        'name' => '',
+        'email' => 'wrong-email',
+        'password' => 'short',
+        'password_confirmation' => 'short',
+    ];
+
+    $response = $this->postJson('/api/auth/register', $payload);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['name', 'email', 'password']);
 });

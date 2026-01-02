@@ -18,7 +18,7 @@ class TaskFactory extends Factory
     {
         return [
             'name' => fake()->sentence(),
-            'completed'=>random_int(0,1)
+            'completed' => random_int(0, 1),
         ];
     }
 }

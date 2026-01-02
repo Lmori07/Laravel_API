@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Auth\LoginController;
+use App\Http\Controllers\API\Auth\RegisterController;
 use App\Http\Controllers\API\V1\CompleteTaskController;
 use App\Http\Controllers\API\V1\TaskController;
 use Illuminate\Http\Request;
@@ -10,13 +11,14 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-//prefix routers version 1 for API.
+// prefix routers version 1 for API.
 Route::prefix('v1')->group(function () {
     Route::apiResource('/tasks', TaskController::class);
-    Route::patch('/tasks/{task}/complete',CompleteTaskController::class );
+    Route::patch('/tasks/{task}/complete', CompleteTaskController::class);
 });
 
-//prefix routers for authentication
+// prefix routers for authentication
 Route::prefix('auth')->group(function () {
-   Route::post('/login', LoginController::class);
+    Route::post('/login', LoginController::class);
+    Route::post('/register', RegisterController::class);
 });
