@@ -62,3 +62,23 @@ test('user cannot register with invalid credentials', function () {
     $response->assertStatus(422);
     $response->assertJsonValidationErrors(['name', 'email', 'password']);
 });
+
+test('user can logout correctly', function () {
+    $user = User::factory()->create();
+
+    $token = $user->createToken('laravel_api_token')->plainTextToken;
+
+    $response = $this->withHeaders([
+        'Authorization' => 'Bearer ' . $token,
+    ])->postJson('/api/auth/logout');
+
+    $response->assertNoContent();
+
+    //This will clear the auth guard and will simulate a fresh request.
+    $this->app['auth']->forgetGuards();
+
+    $protected = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/user');
+
+    $protected->assertStatus(401);
+
+});
