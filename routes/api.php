@@ -13,10 +13,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // prefix routers version 1 for API.
-Route::prefix('v1')->group(function () {
-    Route::apiResource('/tasks', TaskController::class);
-    Route::patch('/tasks/{task}/complete', CompleteTaskController::class);
-});
+Route::prefix('v1')->group(base_path('routes/API/V1_no_authenticated.php'));
+Route::prefix('v2')->middleware('auth:sanctum')->group(base_path('routes/API/V2_authenticated.php'));
 
 // prefix routers for authentication
 Route::prefix('auth')->group(function () {

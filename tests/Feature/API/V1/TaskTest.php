@@ -11,7 +11,7 @@ test('example', function () {
     $response->assertStatus(200);
 });
 
-test('test user can get list of tasks', function () {
+test('test guest can get list of tasks', function () {
     // Arrange: create 5 fake tasks
     Task::factory()->count(5)->create();
 
@@ -28,12 +28,12 @@ test('test user can get list of tasks', function () {
     ]);
 });
 
-test('test user can get single task', function () {
+test('test guest can get single task', function () {
     // Arrange
     $task = Task::factory()->create();
 
     // Act: Added a missing forward slash before the ID
-    $response = $this->getJson('/api/v1/tasks/'.$task->id);
+    $response = $this->getJson('/api/v1/tasks/' . $task->id);
 
     // Assert
     $response->assertOk();
@@ -43,7 +43,7 @@ test('test user can get single task', function () {
 });
 
 // POST /task -> create a new task
-test('user can create a new task', function () {
+test('guest can create a new task', function () {
 
     $response = $this->postJson('/api/v1/tasks', [
         'name' => 'New Task',
@@ -55,7 +55,7 @@ test('user can create a new task', function () {
 });
 
 // PUT /task/{id} -> update a task
-test('user cannot create invalid task', function () {
+test('guest cannot create invalid task', function () {
     $response = $this->postJson('/api/v1/tasks', [
         'name' => '',
     ]);
@@ -65,11 +65,11 @@ test('user cannot create invalid task', function () {
 });
 
 // PUT /task/{id} -> update a task v2
-test('user can update a task', function () {
+test('guest can update a task', function () {
 
     $task = Task::factory()->create();
 
-    $response = $this->putJson('/api/v1/tasks/'.$task->id, [
+    $response = $this->putJson('/api/v1/tasks/' . $task->id, [
         'name' => 'Updated Task',
     ]);
 
@@ -79,11 +79,11 @@ test('user can update a task', function () {
     ]);
 });
 
-test('user cannot update task with invalid data', function () {
+test('guest cannot update task with invalid data', function () {
 
     $task = Task::factory()->create();
 
-    $response = $this->putJson('/api/v1/tasks/'.$task->id, [
+    $response = $this->putJson('/api/v1/tasks/' . $task->id, [
         'name' => '',
     ]);
 
@@ -92,13 +92,13 @@ test('user cannot update task with invalid data', function () {
 });
 
 // PATCH /task/{id} -> mark the task as completed or incomplete
-test('user can toggle task completion', function () {
+test('guest can toggle task completion', function () {
 
     $task = Task::factory()->create([
         'completed' => false,
     ]);
 
-    $response = $this->patchJson('/api/v1/tasks/'.$task->id.'/complete', [
+    $response = $this->patchJson('/api/v1/tasks/' . $task->id . '/complete', [
         'completed' => true,
     ]);
 
@@ -108,11 +108,11 @@ test('user can toggle task completion', function () {
     ]);
 });
 
-test('user cannot toggle task completion with invalid data', function () {
+test('guest cannot toggle task completion with invalid data', function () {
 
     $task = Task::factory()->create();
 
-    $response = $this->patchJson('/api/v1/tasks/'.$task->id.'/complete', [
+    $response = $this->patchJson('/api/v1/tasks/' . $task->id . '/complete', [
         'completed' => 'invalid',
     ]);
 
@@ -121,11 +121,11 @@ test('user cannot toggle task completion with invalid data', function () {
 });
 
 // Delete /task/{id} -> delete a task
-test('user can delete a task', function () {
+test('guest can delete a task', function () {
 
     $task = Task::factory()->create();
 
-    $response = $this->deleteJson('/api/v1/tasks/'.$task->id);
+    $response = $this->deleteJson('/api/v1/tasks/' . $task->id);
     $response->assertNoContent();
     $this->assertDatabaseMissing('tasks', [
         'id' => $task->id,
