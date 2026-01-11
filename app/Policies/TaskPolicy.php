@@ -20,7 +20,8 @@ class TaskPolicy
      */
     public function view(?User $user, Task $task): bool
     {
-        return true;
+        //With this we guarantee that the user can only view their own tasks.
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -36,7 +37,8 @@ class TaskPolicy
      */
     public function update(?User $user, Task $task): bool
     {
-        return true;
+        //With this we guarantee that the user can only view their own tasks.
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -44,7 +46,8 @@ class TaskPolicy
      */
     public function delete(?User $user, Task $task): bool
     {
-        return true;
+        //With this we guarantee that the user can only view their own tasks.
+        return $user->id === $task->user_id;
     }
 
     /**
